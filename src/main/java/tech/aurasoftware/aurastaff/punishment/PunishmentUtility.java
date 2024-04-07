@@ -237,18 +237,27 @@ public class PunishmentUtility {
         for (String arg : args) {
             if (arg.equalsIgnoreCase("-d")) {
                 durationIndex = i;
+                i++;
+                continue;
             }
+
+            if(durationIndex != -1 && i == durationIndex + 1){
+                i++;
+                continue;
+            }
+
             if (arg.equalsIgnoreCase("-s")) {
+                i++;
                 silent = true;
+                continue;
             }
             i++;
             reasonBuilder.append(arg);
-            reasonBuilder.append(" ");
+            if(i != args.length-1){
+                reasonBuilder.append(" ");
+            }
         }
-        reason = reasonBuilder.toString().trim();
-
-        reason = reason.replace("-s", "");
-
+        reason = reasonBuilder.toString();
 
         if (durationIndex != -1) {
             if (args.length <= durationIndex + 1) {
@@ -261,7 +270,6 @@ public class PunishmentUtility {
             // Time value
             String timeValue = timeString.substring(0, timeString.length() - 1);
 
-            reason = reason.replace("-d " + timeString, "");
             try {
                 Long.parseLong(timeValue);
             } catch (NumberFormatException e) {
